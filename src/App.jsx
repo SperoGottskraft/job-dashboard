@@ -25,7 +25,6 @@ export default function App() {
   const { jobs, status, error, lastFetchedAt, refresh } = useJobData();
   const { appliedCount, markApplied, unmarkApplied, isApplied, getAppliedAt } = useAppliedJobs();
 
-  // All filter/sort state is persisted to localStorage
   const [search, setSearch] = useLocalStorage("jd_search", "");
   const [selectedDate, setSelectedDate] = useLocalStorage("jd_date", formatDateInput(new Date()));
   const [dateFilterEnabled, setDateFilterEnabled] = useLocalStorage("jd_date_enabled", true);
@@ -100,7 +99,6 @@ export default function App() {
           .localeCompare(String(b.companyname || "").toLowerCase())
       );
     }
-    // date (default) — newest scraped first
     return list.sort((a, b) => {
       const da = parseDate(a.scrapedat || a.scraped_at)?.getTime() ?? 0;
       const db = parseDate(b.scrapedat || b.scraped_at)?.getTime() ?? 0;
@@ -115,25 +113,25 @@ export default function App() {
   }, [jobs, filteredJobs]);
 
   return (
-    <div className="min-h-screen bg-[radial-gradient(ellipse_at_top,#2a0a10_0%,#0e0405_50%,#080204_100%)] text-red-50/80">
+    <div className="min-h-screen bg-[#f8fafc] text-[#0f172a]">
       <div className="mx-auto max-w-5xl px-4 py-8">
 
         {/* ── Header ─────────────────────────────────────────────────── */}
         <header className="mb-6">
           <div className="flex items-start justify-between gap-4 flex-wrap">
             <div>
-              <div className="mb-3 inline-flex items-center gap-1.5 rounded-full border border-red-800/30 bg-red-900/12 px-3 py-1 text-[10px] uppercase tracking-[0.25em] text-red-300/55">
+              <div className="mb-3 inline-flex items-center gap-1.5 rounded-full border border-[#e2e8f0] bg-[#f1f5f9] px-3 py-1 text-[10px] uppercase tracking-[0.25em] text-[#64748b]">
                 <Briefcase className="h-3 w-3" />
                 Job Signal Board
               </div>
-              <h1 className="text-3xl font-black tracking-tight text-red-50/90">
+              <h1 className="text-3xl font-black tracking-tight text-[#0f172a]">
                 Daily Job Report
               </h1>
             </div>
 
             <div className="flex items-center gap-2.5 mt-1">
               {lastFetchedAt && (
-                <span className="text-xs text-red-300/35">
+                <span className="text-xs text-[#94a3b8]">
                   {isRefreshing ? (
                     <span className="flex items-center gap-1">
                       <Loader2 className="h-3 w-3 animate-spin" /> Refreshing…
@@ -147,7 +145,7 @@ export default function App() {
                 onClick={refresh}
                 disabled={isLoading || isRefreshing}
                 title="Force refresh from Google Sheets"
-                className="inline-flex items-center gap-1.5 rounded-xl border border-red-800/45 bg-red-950/35 px-3 py-1.5 text-xs text-red-200/65 transition hover:bg-red-900/28 disabled:opacity-40"
+                className="inline-flex items-center gap-1.5 rounded-xl border border-[#e2e8f0] bg-white px-3 py-1.5 text-xs text-[#64748b] transition hover:border-[#1d4ed8]/40 hover:text-[#1d4ed8] disabled:opacity-40"
               >
                 <RefreshCw className="h-3.5 w-3.5" />
                 Refresh
@@ -165,34 +163,34 @@ export default function App() {
             ].map(({ label, value }) => (
               <div
                 key={label}
-                className="rounded-xl border border-red-950/55 bg-[#110608]/60 px-4 py-3"
+                className="rounded-xl border border-[#e2e8f0] bg-white px-4 py-3"
               >
-                <div className="text-[10px] uppercase tracking-[0.2em] text-red-300/38">
+                <div className="text-[10px] uppercase tracking-[0.2em] text-[#94a3b8]">
                   {label}
                 </div>
-                <div className="mt-1 text-2xl font-bold text-red-50/78">{value}</div>
+                <div className="mt-1 text-2xl font-bold text-[#0f172a]">{value}</div>
               </div>
             ))}
           </div>
         </header>
 
         {/* ── Filter bar ─────────────────────────────────────────────── */}
-        <div className="mb-5 rounded-xl border border-red-950/55 bg-[#0c0507]/80 p-3 backdrop-blur">
+        <div className="mb-5 rounded-xl border border-[#e2e8f0] bg-white p-3">
           <div className="flex flex-col gap-2 lg:flex-row lg:items-center">
 
             {/* Search */}
-            <label className="flex flex-1 items-center gap-2 rounded-lg border border-red-950/70 bg-black/18 px-3 py-2">
-              <Search className="h-3.5 w-3.5 shrink-0 text-red-300/38" />
+            <label className="flex flex-1 items-center gap-2 rounded-lg border border-[#e2e8f0] bg-[#f8fafc] px-3 py-2">
+              <Search className="h-3.5 w-3.5 shrink-0 text-[#94a3b8]" />
               <input
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 placeholder="Search title, company, notes…"
-                className="w-full bg-transparent text-sm text-red-50/78 outline-none placeholder:text-red-200/20"
+                className="w-full bg-transparent text-sm text-[#0f172a] outline-none placeholder:text-[#94a3b8]"
               />
               {search && (
                 <button
                   onClick={() => setSearch("")}
-                  className="text-[11px] text-red-300/38 hover:text-red-300/65"
+                  className="text-[11px] text-[#94a3b8] hover:text-[#64748b]"
                 >
                   ✕
                 </button>
@@ -200,16 +198,16 @@ export default function App() {
             </label>
 
             {/* Date filter */}
-            <div className="flex items-center gap-1.5 rounded-lg border border-red-950/70 bg-black/18 px-3 py-2">
-              <CalendarDays className="h-3.5 w-3.5 shrink-0 text-red-300/38" />
+            <div className="flex items-center gap-1.5 rounded-lg border border-[#e2e8f0] bg-[#f8fafc] px-3 py-2">
+              <CalendarDays className="h-3.5 w-3.5 shrink-0 text-[#94a3b8]" />
               <select
                 value={selectedDate}
                 onChange={(e) => setSelectedDate(e.target.value)}
                 disabled={!dateFilterEnabled}
-                className="bg-transparent text-sm text-red-50/72 outline-none disabled:opacity-40 cursor-pointer"
+                className="bg-transparent text-sm text-[#0f172a] outline-none disabled:opacity-40 cursor-pointer"
               >
                 {availableDates.map((d) => (
-                  <option key={d} value={d} className="bg-[#120608]">
+                  <option key={d} value={d} className="bg-white">
                     {d}
                   </option>
                 ))}
@@ -219,8 +217,8 @@ export default function App() {
                 className={cx(
                   "ml-1 rounded-full border px-2 py-0.5 text-[10px] font-medium transition",
                   dateFilterEnabled
-                    ? "border-red-700/45 bg-red-900/18 text-red-200/72"
-                    : "border-red-950 text-red-200/32 hover:text-red-200/55"
+                    ? "border-[#1d4ed8]/40 bg-[#eff6ff] text-[#1d4ed8]"
+                    : "border-[#e2e8f0] text-[#94a3b8] hover:text-[#64748b]"
                 )}
               >
                 {dateFilterEnabled ? "On" : "Off"}
@@ -228,8 +226,8 @@ export default function App() {
             </div>
 
             {/* Sort */}
-            <div className="flex items-center gap-1 rounded-lg border border-red-950/70 bg-black/18 px-3 py-2">
-              <SlidersHorizontal className="h-3.5 w-3.5 shrink-0 text-red-300/38 mr-1" />
+            <div className="flex items-center gap-1 rounded-lg border border-[#e2e8f0] bg-[#f8fafc] px-3 py-2">
+              <SlidersHorizontal className="h-3.5 w-3.5 shrink-0 text-[#94a3b8] mr-1" />
               {SORT_OPTIONS.map((opt) => (
                 <button
                   key={opt.value}
@@ -237,8 +235,8 @@ export default function App() {
                   className={cx(
                     "rounded-md px-2 py-0.5 text-xs transition",
                     sortBy === opt.value
-                      ? "bg-red-800/38 text-red-100/82 font-medium"
-                      : "text-red-200/42 hover:text-red-200/62"
+                      ? "bg-[#1d4ed8] text-white font-medium"
+                      : "text-[#94a3b8] hover:text-[#64748b]"
                   )}
                 >
                   {opt.label}
@@ -271,8 +269,8 @@ export default function App() {
                   className={cx(
                     "rounded-lg border px-3 py-2 text-xs font-medium transition",
                     active
-                      ? "border-red-700/45 bg-red-800/22 text-red-100/82"
-                      : "border-red-950/70 bg-black/18 text-red-200/40 hover:text-red-200/62"
+                      ? "border-[#1d4ed8]/40 bg-[#eff6ff] text-[#1d4ed8]"
+                      : "border-[#e2e8f0] bg-[#f8fafc] text-[#94a3b8] hover:text-[#64748b]"
                   )}
                 >
                   {label}
@@ -284,7 +282,6 @@ export default function App() {
 
         {/* ── Content ────────────────────────────────────────────────── */}
 
-        {/* First-time loading skeletons */}
         {isLoading && (
           <div className="space-y-4">
             {Array.from({ length: 4 }, (_, i) => (
@@ -293,30 +290,27 @@ export default function App() {
           </div>
         )}
 
-        {/* Error (still show cached jobs below if available) */}
         {error && !isLoading && (
-          <div className="mb-4 rounded-xl border border-rose-800/45 bg-rose-950/12 p-5">
-            <div className="mb-1 flex items-center gap-2 font-semibold text-rose-300/85">
+          <div className="mb-4 rounded-xl border border-rose-200 bg-rose-50 p-5">
+            <div className="mb-1 flex items-center gap-2 font-semibold text-rose-700">
               <WifiOff className="h-4 w-4" />
               Couldn't reach the sheet
             </div>
-            <p className="text-sm text-rose-100/55">{error}</p>
+            <p className="text-sm text-rose-600">{error}</p>
             {jobs.length > 0 && (
-              <p className="mt-2 text-xs text-rose-100/38">
+              <p className="mt-2 text-xs text-rose-400">
                 Showing cached data from {formatRelativeTime(lastFetchedAt)}.
               </p>
             )}
           </div>
         )}
 
-        {/* Empty state */}
         {!isLoading && sortedJobs.length === 0 && (
-          <div className="rounded-xl border border-red-950/55 bg-black/18 p-10 text-center">
-            <p className="text-sm text-red-100/38">No jobs match the current filters.</p>
+          <div className="rounded-xl border border-[#e2e8f0] bg-white p-10 text-center">
+            <p className="text-sm text-[#94a3b8]">No jobs match the current filters.</p>
           </div>
         )}
 
-        {/* Job list */}
         {!isLoading && sortedJobs.length > 0 && (
           <div className="space-y-4">
             {sortedJobs.map((job, i) => (
@@ -337,9 +331,8 @@ export default function App() {
           </div>
         )}
 
-        {/* Footer */}
         {jobs.length > 0 && lastFetchedAt && (
-          <footer className="mt-8 text-center text-xs text-red-300/22">
+          <footer className="mt-8 text-center text-xs text-[#cbd5e1]">
             Sheet source: Google Sheets · Last synced {formatRelativeTime(lastFetchedAt)}
           </footer>
         )}
